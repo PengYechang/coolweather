@@ -1,9 +1,11 @@
-package com.myweather.app.model;
+package com.myweather.app.db;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.myweather.app.db.CoolWeatherOpenHelper;
+import com.myweather.app.model.City;
+import com.myweather.app.model.County;
+import com.myweather.app.model.Province;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -63,13 +65,14 @@ public class CoolWeatherDB {
 	public void saveCity(City city){
 		if(city != null){
 			ContentValues values = new ContentValues();
-			values.put("province_name", city.getCityName());
-			values.put("province_code", city.getCityCode());
+			values.put("city_name", city.getCityName());
+			values.put("city_code", city.getCityCode());
+			values.put("province_id", city.getProvinceId());
 			db.insert("City", null, values);
 		}
 	}
 	
-	public List<Province> loadCities(int provinceId){
+	public List<City> loadCities(int provinceId){
 		List<City> list = new ArrayList<City>();
 		Cursor cursor = db.query("City", null, "province_id = ?", new String[]{String.valueOf(provinceId)}, null, null, null);
 		if(cursor.moveToFirst()){
@@ -87,9 +90,41 @@ public class CoolWeatherDB {
 		}
 		return list;
 	}
-}
+	
+	//County
+	public void saveCounty(County county){
+		if(county != null){
+			ContentValues values = new ContentValues();
+			values.put("county_name", county.getCountyName());
+			values.put("county_code", county.getCountyCode());
+			values.put("city_id", county.getCityId());
+			db.insert("County", null, values);
+		}
+	}
+	
+	public List<County> loadCounties(int cityId){
+		List<County> list = new ArrayList<County>();
+		Cursor cursor = db.query("County", null, "city_id = ?", new String[]{String.valueOf(cityId)}, null, null, null);
+		if(cursor.moveToFirst()){
+			do{
+				County county = new County();
+				county.setId(cursor.getInt(cursor.getColumnIndex("id")));
+				county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
+				county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
+				county.setCityId(cityId);
+				list.add(county);
+			}while(cursor.moveToNext());
+		}
+		if(cursor != null){
+			cursor.close();
+		}
+		return list;
+	}
 	
 }
+	
+
+
 
 
 

@@ -4,11 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 
 	//Province table
-	public static final String CREATE_PROVINCE = "create table Provice" +
+	public static final String CREATE_PROVINCE = "create table Province" +
 			"(id integer primary key autoincrement,province_name text,province_code text)";
 	
 	//City table
@@ -37,7 +38,6 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-
 	}
 
 }
